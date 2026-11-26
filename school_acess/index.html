@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Acesso</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h2>Controle de Acesso</h2>
+    <p>Escola - Sistema de gerenciamento</p>
+</header>
+
+<main>
+    <section class="dados">
+        <div>
+            <p>Alunos</p>
+            <h2 id="alunos">0</h2>
+        </div>
+        <div>
+            <p>Funcionários</p>
+            <h2 id="funcionarios">0</h2>
+        </div>
+        <div>
+            <p>Visitantes</p>
+            <h2 id="visitantes">0</h2>
+        </div>
+        <div>
+            <p>Pessoas na escola</p>
+            <h2 id="presentes">0</h2>
+        </div>
+    </section>
+
+    <section class="movimentacoes">
+        <h3>Últimas movimentações</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Data e horário</th>
+                    <th>Acesso</th>
+                </tr>
+            </thead>
+            <tbody id="movimentacoes">
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<script>
+async function carregarDados(){
+    const resposta = await fetch("back/index.php");
+    const dados = await resposta.json();
+
+    document.getElementById("alunos").textContent = dados.alunos;
+    document.getElementById("funcionarios").textContent = dados.funcionarios;
+    document.getElementById("visitantes").textContent = dados.visitantes;
+    document.getElementById("presentes").textContent = dados.presentes;
+
+    document.getElementById("movimentacoes").innerHTML = dados.movimentacoes.map(item => `
+        <tr>
+            <td>${item.nome}</td>
+            <td>${item.categoria}</td>
+            <td>${item.data_hora}</td>
+            <td class="${item.tipo_acesso}">${item.tipo_acesso}</td>
+        </tr>
+    `).join("");
+}
+
+carregarDados();
+</script>
+</body>
+</html>
